@@ -1,9 +1,3 @@
-import express from 'express';
-
-const app = express();
-app.use(express.json())
-
-
 const pessoas = [
     { id: 1, nome: "Ana", idade: 25 },
     { id: 2, nome: "Bruno", idade: 30 },
@@ -17,15 +11,15 @@ const pessoas = [
     { id: 10, nome: "João", idade: 31 }
   ];
 
-//Fazer um get por id que bvusque o registro com id passado no parametro
-app.get('/idade/:idPessoa', (req, res) => {
+
+const getId = (req, res) => {
     const ids = Number(req.params.idPessoa);
     return res.status(200).send(pessoas.find((valor) => valor.id == ids))
-});
+}
 
-// Fazer um get normal que devolva todos, mas caso eu passe uma query = ? devolva somente com a idade da query
-app.get('/idade', (req, res) => {
-    const idades = Number(req.query.idIdade); 
+
+const getIdade = (req, res) => {
+    const idades = parseInt(req.query.idIdade); 
 
     if (!idades) {
         const todas = pessoas.map(`Nome: ${pessoas.nome}, Idade: ${pessoas.idade}`);
@@ -37,12 +31,9 @@ app.get('/idade', (req, res) => {
         .map(`Nome: ${pessoas.nome}, Idade: ${pessoas.idade}`);
 
     return res.status(200).send(filtro);
-});
+}
 
-
-// Passar o nome no corpo, a idade nos  parametros, verificar se é maior que 18, se for, retorna true, senao, false
-app.post('/idade/:idade', (req, res) => {
-    const { nome } = req.body;
+const postMedevassa = (req, res) => {
     const idade = Number(req.params.idade);
 
     if (idade >= 18) {
@@ -56,13 +47,10 @@ app.post('/idade/:idade', (req, res) => {
             pode: 'Não pode ir no Medevassa'
         });
     }
-});
+}
 
-
-app.listen('3131', (e) => {
-    if (e) {
-        return console.log(e);
-    } else {
-        console.log(`api rodando na http://localhost:3131`);
-    }
-})
+export default {
+    getId,
+    getIdade,
+    postMedevassa,
+}
